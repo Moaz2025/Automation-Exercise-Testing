@@ -1,35 +1,30 @@
-const { beforeEach } = require("mocha");
-
-beforeEach(() => {
-  cy.visit("https://www.automationexercise.com/");
-});
 describe("signup", () => {
-  it("Check that user can't signup with empty name and email", () => {
+  beforeEach(() => {
+    cy.visit("https://www.automationexercise.com/");
     cy.get('[href="/login"]').click();
+  });
+
+  it("Check that user can't signup with empty name and email", () => {
     cy.get('[data-qa="signup-button"]').click();
   });
 
-  it.skip("Check that user can't signup with empty name", () => {
-    cy.get('[href="/login"]').click();
+  it("Check that user can't signup with empty name", () => {
     cy.get('[data-qa="signup-email"]').type("moaz@gmail.com");
     cy.get('[data-qa="signup-button"]').click();
   });
 
-  it.skip("Check that user can't signup with empty email", () => {
-    cy.get('[href="/login"]').click();
+  it("Check that user can't signup with empty email", () => {
     cy.get('[data-qa="signup-name"]').type("Moaz");
     cy.get('[data-qa="signup-button"]').click();
   });
 
-  it.skip("Check that user can't signup with invalid email", () => {
-    cy.get('[href="/login"]').click();
+  it("Check that user can't signup with invalid email", () => {
     cy.get('[data-qa="signup-name"]').type("Moaz");
     cy.get('[data-qa="signup-email"]').type("moaz#gmail.com");
     cy.get('[data-qa="signup-button"]').click();
   });
 
-  it.skip("Check that user can signup with valid name, email, and valid details", () => {
-    cy.get('[href="/login"]').click();
+  it("Check that user can signup with valid name, email, and valid details", () => {
     cy.title().should("eq", "Automation Exercise - Signup / Login");
     cy.get('[data-qa="signup-name"]').type("Moaz");
     let email = generateEmail();
@@ -53,8 +48,7 @@ describe("signup", () => {
     cy.url().should("include", "account_created");
   });
 
-  it.only("Check that user can't signup with email already registered", () => {
-    cy.get('[href="/login"]').click();
+  it("Check that user can't signup with email already registered", () => {
     cy.get('[data-qa="signup-name"]').type("Moaz");
     cy.get('[data-qa="signup-email"]').type("moaz@gmail.com");
     cy.get('[data-qa="signup-button"]').click();
