@@ -10,6 +10,9 @@ describe("logout", () => {
   it("Check that user can logout successfully", () => {
     cy.get('[href="/logout"]').click();
     cy.url().should("include", "login");
+    cy.get('[href="/"]').eq(1).click();
+    cy.get('[href="/logout"]').should("not.exist");
+    cy.get('[href="/delete_account"]').should("not.exist");
   });
 
   it("Check that user can't get back to his account after logout", () => {

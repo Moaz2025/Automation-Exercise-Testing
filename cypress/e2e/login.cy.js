@@ -10,6 +10,8 @@ describe("login", () => {
     cy.get('[data-qa="login-button"]').click();
     cy.title().should("eq", "Automation Exercise");
     cy.get('[class="col-sm-8"]').should("contain", " Logged in as ");
+    cy.get('[href="/logout"]').should("exist");
+    cy.get('[href="/delete_account"]').should("exist");
   });
 
   it("Check that user can't login with email not exist", () => {

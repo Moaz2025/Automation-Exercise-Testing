@@ -29,21 +29,21 @@ describe("add to cart (logged in)", { testIsolation: false }, () => {
   });
 
   // view cart from the message
-  it("Check that user (as a guest) can add a product to cart", () => {
+  it("Check that user (logged in) can add a product to cart", () => {
     cy.get('[href="/view_cart"]').eq(1).click();
     cy.url().should("include", "view_cart");
     cy.get('[class="cart_quantity"]').should("contain", "1");
   });
 
   // view cart from the main cart button
-  it("Check that user (as a guest) can add a product to cart", () => {
+  it("Check that user (logged in) can add a product to cart", () => {
     cy.get('[class="btn btn-success close-modal btn-block"]').click();
     cy.get('[href="/view_cart"]').eq(0).click();
     cy.url().should("include", "view_cart");
     cy.get('[class="cart_quantity"]').should("contain", "1");
   });
 
-  it("Check that user (as a guest) can increase the quantity of a product in the cart by adding it one more time", () => {
+  it("Check that user (logged in) can increase the quantity of a product in the cart by adding it one more time", () => {
     cy.get('[class="btn btn-success close-modal btn-block"]').click();
     cy.get('[class="btn btn-default add-to-cart"]').eq(0).click();
     cy.get('[class="modal-content"]').should(
@@ -56,7 +56,7 @@ describe("add to cart (logged in)", { testIsolation: false }, () => {
     cy.get('[class="cart_quantity"]').should("contain", "2");
   });
 
-  it("Check that user (as a guest) can increase the quantity of a product in the cart by adding more of it", () => {
+  it("Check that user (logged in) can increase the quantity of a product in the cart by adding more of it", () => {
     cy.get('[class="btn btn-success close-modal btn-block"]').click();
     cy.get('[href="/product_details/1"]').click();
     cy.url().should("include", "/product_details/1");
