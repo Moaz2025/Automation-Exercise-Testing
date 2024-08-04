@@ -6,46 +6,49 @@ describe("contact us form", () => {
   });
 
   beforeEach(() => {
-    cy.visit(data.homePageUrl);
-    cy.get(data.contactUsButton).click();
-    cy.url().should("include", data.contactUsUrl);
-    cy.title().should("eq", data.contactUsPageTitle);
+    cy.visit(data.urls.homePageUrl);
+    cy.get(data.buttons.contactUsButton).click();
+    cy.url().should("include", data.urls.contactUsUrl);
+    cy.title().should("eq", data.titles.contactUsPageTitle);
   });
 
   it("Check that the user can submit the form successfully with valid data", () => {
-    cy.get(data.nameTextbox).type(data.name);
-    cy.get(data.emailTextbox).type(data.email);
-    cy.get(data.subjectTextbox).type(data.subject);
-    cy.get(data.messagetextbox).type(data.message);
-    cy.get(data.submitButton).click();
-    cy.get(data.contactForm).should("contain", data.contactUsSuccessMessage);
+    cy.get(data.textboxes.nameTextbox).type(data.testData.name);
+    cy.get(data.textboxes.emailTextbox).type(data.testData.email);
+    cy.get(data.textboxes.subjectTextbox).type(data.testData.subject);
+    cy.get(data.textboxes.messageTextbox).type(data.testData.message);
+    cy.get(data.buttons.submitButton).click();
+    cy.get(data.selectors.contactForm).should(
+      "contain",
+      data.messages.contactUsSuccessMessage
+    );
   });
 
   it("Check that the user can't submit the form with empty name field", () => {
-    cy.get(data.emailTextbox).type(data.email);
-    cy.get(data.subjectTextbox).type(data.subject);
-    cy.get(data.messagetextbox).type(data.message);
-    cy.get(data.submitButton).click();
+    cy.get(data.textboxes.emailTextbox).type(data.testData.email);
+    cy.get(data.textboxes.subjectTextbox).type(data.testData.subject);
+    cy.get(data.textboxes.messageTextbox).type(data.testData.message);
+    cy.get(data.buttons.submitButton).click();
   });
 
   it("Check that the user can't submit the form with empty email field", () => {
-    cy.get(data.nameTextbox).type(data.name);
-    cy.get(data.subjectTextbox).type(data.subject);
-    cy.get(data.messagetextbox).type(data.message);
-    cy.get(data.submitButton).click();
+    cy.get(data.textboxes.nameTextbox).type(data.testData.name);
+    cy.get(data.textboxes.subjectTextbox).type(data.testData.subject);
+    cy.get(data.textboxes.messageTextbox).type(data.testData.message);
+    cy.get(data.buttons.submitButton).click();
   });
 
   it("Check that the user can't submit the form with empty subject field", () => {
-    cy.get(data.nameTextbox).type(data.name);
-    cy.get(data.emailTextbox).type(data.email);
-    cy.get(data.messagetextbox).type(data.message);
-    cy.get(data.submitButton).click();
+    cy.get(data.textboxes.nameTextbox).type(data.testData.name);
+    cy.get(data.textboxes.emailTextbox).type(data.testData.email);
+    cy.get(data.textboxes.messageTextbox).type(data.testData.message);
+    cy.get(data.buttons.submitButton).click();
   });
 
   it("Check that the user can't submit the form with empty message field", () => {
-    cy.get(data.nameTextbox).type(data.name);
-    cy.get(data.emailTextbox).type(data.email);
-    cy.get(data.subjectTextbox).type(data.subject);
-    cy.get(data.submitButton).click();
+    cy.get(data.textboxes.nameTextbox).type(data.testData.name);
+    cy.get(data.textboxes.emailTextbox).type(data.testData.email);
+    cy.get(data.textboxes.subjectTextbox).type(data.testData.subject);
+    cy.get(data.buttons.submitButton).click();
   });
 });

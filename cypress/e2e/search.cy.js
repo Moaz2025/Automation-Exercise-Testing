@@ -6,25 +6,31 @@ describe("search", () => {
   });
 
   beforeEach(() => {
-    cy.visit(data.homePageUrl);
-    cy.get(data.productsButton).click();
-    cy.title().should("eq", data.productsPageTitle);
+    cy.visit(data.urls.homePageUrl);
+    cy.get(data.buttons.productsButton).click();
+    cy.title().should("eq", data.titles.productsPageTitle);
   });
 
   it("Check that user can search for a keyword that is found in the products", () => {
-    cy.get(data.searchBox).type(data.foundKeyword);
-    cy.get(data.searchButton).click();
-    cy.url().should("include", data.searchProductsUrl + data.foundKeyword);
+    cy.get(data.textboxes.searchBox).type(data.testData.foundKeyword);
+    cy.get(data.buttons.searchButton).click();
+    cy.url().should(
+      "include",
+      data.urls.searchProductsUrl + data.testData.foundKeyword
+    );
   });
 
   it("Check that user can't search for a keyword that is not found in the products", () => {
-    cy.get(data.searchBox).type(data.notFoundKeyword);
-    cy.get(data.searchButton).click();
-    cy.url().should("include", data.searchProductsUrl + data.notFoundKeyword);
+    cy.get(data.textboxes.searchBox).type(data.testData.notFoundKeyword);
+    cy.get(data.buttons.searchButton).click();
+    cy.url().should(
+      "include",
+      data.urls.searchProductsUrl + data.testData.notFoundKeyword
+    );
   });
 
   it("Check that user can't search for an empty keyword", () => {
-    cy.get(data.searchButton).click();
-    cy.url().should("include", data.searchProductsUrl);
+    cy.get(data.buttons.searchButton).click();
+    cy.url().should("include", data.urls.searchProductsUrl);
   });
 });

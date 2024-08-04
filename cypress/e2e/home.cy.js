@@ -6,9 +6,18 @@ describe("home", () => {
   });
 
   it("some tests for home page", () => {
-    cy.visit(data.homePageUrl);
-    cy.get(".left-sidebar > h2").should("have.text", "Category");
-    cy.get(".brands_products > h2").should("have.text", "Brands");
-    cy.get("#slider-carousel").should("have.class", "carousel slide");
+    cy.visit(data.urls.homePageUrl);
+    cy.get(data.selectors.leftSidebar).should(
+      "have.text",
+      data.labels.category
+    );
+    cy.get(data.selectors.brandsProducts).should(
+      "have.text",
+      data.labels.brands
+    );
+    cy.get(data.selectors.slider).should(
+      "have.class",
+      data.selectors.carouselSlide
+    );
   });
 });

@@ -1,91 +1,108 @@
 describe("place order", () => {
+  before(() => {
+    cy.fixture("example").then(function (data) {
+      globalThis.data = data;
+    });
+  });
+
   beforeEach(() => {
-    cy.visit("https://www.automationexercise.com/");
+    cy.visit(data.urls.homePageUrl);
   });
 
   // view cart from the message
   it("Check that user can't checkout as a guest", () => {
-    cy.get('[class="btn btn-default add-to-cart"]').eq(0).click();
-    cy.get('[class="modal-content"]').should(
+    cy.get(data.buttons.addToCartButton).eq(0).click();
+    cy.get(data.selectors.addedToCartPopupBox).should(
       "contain",
-      "Your product has been added to cart."
+      data.messages.addedToCartMessage
     );
-    cy.get('[href="/view_cart"]').eq(1).click();
-    cy.url().should("include", "view_cart");
-    cy.get('[class="cart_quantity"]').should("contain", "1");
-    cy.get('[class="btn btn-default check_out"]').click();
-    cy.get('[class="modal-body"]').should(
+    cy.get(data.buttons.cartButton).eq(1).click();
+    cy.url().should("include", data.urls.cartUrl);
+    cy.get(data.labels.cartItemQuantity).should("contain", "1");
+    cy.get(data.buttons.checkoutButton).click();
+    cy.get(data.selectors.ckeckoutPopupBox).should(
       "contain",
-      "Register / Login account to proceed on checkout."
+      data.messages.checkoutAsGuestMessage
     );
-    cy.get('[class="modal-footer"]').contains("Continue On Cart").click();
-    cy.url().should("include", "view_cart");
+    cy.get(data.selectors.ckeckoutPopupBox)
+      .contains(data.buttons.continueOnCartButton)
+      .click();
+    cy.url().should("include", data.urls.cartUrl);
   });
 
   // view cart from the main cart button
   it("Check that user can't checkout as a guest", () => {
-    cy.get('[class="btn btn-default add-to-cart"]').eq(0).click();
-    cy.get('[class="modal-content"]').should(
+    cy.get(data.buttons.addToCartButton).eq(0).click();
+    cy.get(data.selectors.addedToCartPopupBox).should(
       "contain",
-      "Your product has been added to cart."
+      data.messages.addedToCartMessage
     );
-    cy.get('[class="btn btn-success close-modal btn-block"]').click();
-    cy.get('[href="/view_cart"]').eq(0).click();
-    cy.url().should("include", "view_cart");
-    cy.get('[class="cart_quantity"]').should("contain", "1");
-    cy.get('[class="btn btn-default check_out"]').click();
-    cy.get('[class="modal-body"]').should(
+    cy.get(data.buttons.continueShoppingButton).click();
+    cy.get(data.buttons.cartButton).eq(0).click();
+    cy.url().should("include", data.urls.cartUrl);
+    cy.get(data.labels.cartItemQuantity).should("contain", "1");
+    cy.get(data.buttons.checkoutButton).click();
+    cy.get(data.selectors.ckeckoutPopupBox).should(
       "contain",
-      "Register / Login account to proceed on checkout."
+      data.messages.checkoutAsGuestMessage
     );
-    cy.get('[class="modal-footer"]').contains("Continue On Cart").click();
-    cy.url().should("include", "view_cart");
+    cy.get(data.selectors.ckeckoutPopupBox)
+      .contains(data.buttons.continueOnCartButton)
+      .click();
+    cy.url().should("include", data.urls.cartUrl);
   });
 
   it("Check that user can't checkout with empty cart", () => {
-    cy.get('[href="/login"]').click();
-    cy.get('[data-qa="login-email"]').type("moaz@gmail.com");
-    cy.get('[data-qa="login-password"]').type("Brightskies@123");
-    cy.get('[data-qa="login-button"]').click();
-    cy.title().should("eq", "Automation Exercise");
-    cy.get('[class="col-sm-8"]').should("contain", " Logged in as ");
-    cy.get('[href="/view_cart"]').eq(0).click();
-    cy.url().should("include", "view_cart");
-    cy.get('[id="empty_cart"]').should("contain", "Cart is empty!");
+    cy.get(data.buttons.signupAndLoginPageButton).click();
+    cy.get(data.textboxes.loginEmailTextbox).type(data.testData.email);
+    cy.get(data.textboxes.loginPasswordTextbox).type(data.testData.password);
+    cy.get(data.buttons.loginButton).click();
+    cy.title().should("eq", data.titles.homePageTitle);
+    cy.get(data.selectors.shopMenu).should("contain", data.labels.loginStatus);
+    cy.get(data.buttons.cartButton).eq(0).click();
+    cy.url().should("include", data.urls.cartUrl);
+    cy.get(data.selectors.emptyCartBox).should(
+      "contain",
+      data.messages.emptyCartMessage
+    );
   });
 
   it("Check that user can checkout with valid card", () => {
-    cy.get('[href="/login"]').click();
-    cy.get('[data-qa="login-email"]').type("moaz@gmail.com");
-    cy.get('[data-qa="login-password"]').type("Brightskies@123");
-    cy.get('[data-qa="login-button"]').click();
-    cy.title().should("eq", "Automation Exercise");
-    cy.get('[class="col-sm-8"]').should("contain", " Logged in as ");
-    cy.get('[class="btn btn-default add-to-cart"]').eq(0).click();
-    cy.get('[class="modal-content"]').should(
+    cy.get(data.buttons.signupAndLoginPageButton).click();
+    cy.get(data.textboxes.loginEmailTextbox).type(data.testData.email);
+    cy.get(data.textboxes.loginPasswordTextbox).type(data.testData.password);
+    cy.get(data.buttons.loginButton).click();
+    cy.title().should("eq", data.titles.homePageTitle);
+    cy.get(data.selectors.shopMenu).should("contain", data.labels.loginStatus);
+    cy.get(data.buttons.addToCartButton).eq(0).click();
+    cy.get(data.selectors.addedToCartPopupBox).should(
       "contain",
-      "Your product has been added to cart."
+      data.messages.addedToCartMessage
     );
-    cy.get('[class="btn btn-success close-modal btn-block"]').click();
-    cy.get('[href="/view_cart"]').eq(0).click();
-    cy.url().should("include", "view_cart");
-    cy.get('[class="cart_quantity"]').should("contain", "1");
-    cy.get('[class="btn btn-default check_out"]').click();
-    cy.url().should("include", "checkout");
-    cy.get('[class="btn btn-default check_out"]').click();
-    cy.get('[name="name_on_card"]').type("Moaz");
-    cy.get('[name="card_number"]').type("5127880999999990");
-    cy.get('[name="cvc"]').type("737");
-    cy.get('[name="expiry_month"]').type("03");
-    cy.get('[name="expiry_year"]').type("2030");
-    cy.get('[class="form-control btn btn-primary submit-button"]').click();
-    cy.url().should("include", "payment_done");
-    cy.get('[class="col-sm-9 col-sm-offset-1"]').should(
+    cy.get(data.buttons.continueShoppingButton).click();
+    cy.get(data.buttons.cartButton).eq(0).click();
+    cy.url().should("include", data.urls.cartUrl);
+    cy.get(data.labels.cartItemQuantity).should("contain", "1");
+    cy.get(data.buttons.checkoutButton).click();
+    cy.url().should("include", data.urls.checkoutUrl);
+    cy.get(data.buttons.placeOrderButton).click();
+    cy.get(data.textboxes.nameOnCardTextbox).type(data.testData.name);
+    cy.get(data.textboxes.cardNumberTextbox).type(data.testData.cardNumber);
+    cy.get(data.textboxes.cvcTextbox).type(data.testData.cvc);
+    cy.get(data.textboxes.expiryMonthTextbox).type(data.testData.expiryMonth);
+    cy.get(data.textboxes.expiryYearTextbox).type(data.testData.expiryYear);
+    cy.get(data.buttons.payAndConfirmOrderButton).click();
+    cy.url().should("include", data.urls.orderPlacedUrl);
+    cy.get(data.selectors.orderPlacedBox).should(
       "contain",
-      "Order Placed!"
+      data.messages.orderPlacedMessage
     );
-    cy.get('[data-qa="continue-button"]').click();
-    cy.url().should("eq", "https://www.automationexercise.com/");
-    cy.get('[href="/"]').should("have.css", "color", "rgb(66, 139, 202)");
+    cy.get(data.buttons.continueButton).click();
+    cy.url().should("eq", data.urls.homePageUrl);
+    cy.get(data.buttons.homeButton).should(
+      "have.css",
+      "color",
+      data.selectors.colorOfSelectedPage
+    );
   });
 });
