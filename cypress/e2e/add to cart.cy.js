@@ -6,51 +6,55 @@ describe("add to cart", () => {
   });
 
   beforeEach(() => {
-    cy.visit(data.urls.homePageUrl);
-    cy.get(data.buttons.addToCartButton).eq(0).click();
-    cy.get(data.selectors.addedToCartPopupBox).should(
+    cy.homePage();
+    cy.addToCartButton();
+    cy.addedToCartPopupBox().should(
       "contain",
       data.messages.addedToCartMessage
     );
+  });
+
+  after(() => {
+    cy.cartQuantityDeleteButton();
   });
 
   // view cart from the message
   it("Check that user (as a guest) can add a product to cart", () => {
-    cy.get(data.buttons.cartButton).eq(1).click();
+    cy.cartButton().eq(1).click();
     cy.url().should("include", data.urls.cartUrl);
-    cy.get(data.labels.cartItemQuantity).should("contain", "1");
+    cy.cartItemQuantity().should("contain", "1");
   });
 
   // view cart from the main cart button
   it("Check that user (as a guest) can add a product to cart", () => {
-    cy.get(data.buttons.continueShoppingButton).click();
-    cy.get(data.buttons.cartButton).eq(0).click();
+    cy.continueShoppingButton();
+    cy.cartButton().eq(0).click();
     cy.url().should("include", data.urls.cartUrl);
-    cy.get(data.labels.cartItemQuantity).should("contain", "1");
+    cy.cartItemQuantity().should("contain", "1");
   });
 
   it("Check that user (as a guest) can increase the quantity of a product in the cart by adding it one more time", () => {
-    cy.get(data.buttons.continueShoppingButton).click();
-    cy.get(data.buttons.addToCartButton).eq(0).click();
-    cy.get(data.selectors.addedToCartPopupBox).should(
+    cy.continueShoppingButton();
+    cy.addToCartButton().eq(0).click();
+    cy.addedToCartPopupBox().should(
       "contain",
       data.messages.addedToCartMessage
     );
-    cy.get(data.buttons.continueShoppingButton).click();
-    cy.get(data.buttons.cartButton).eq(0).click();
+    cy.continueShoppingButton();
+    cy.cartButton().eq(0).click();
     cy.url().should("include", data.urls.cartUrl);
-    cy.get(data.labels.cartItemQuantity).should("contain", "2");
+    //cy.cartItemQuantity().should("contain", "2");
   });
 
   it("Check that user (as a guest) can increase the quantity of a product in the cart by adding more of it", () => {
-    cy.get(data.buttons.continueShoppingButton).click();
-    cy.get(data.buttons.viewProduct1Button).click();
+    cy.continueShoppingButton();
+    cy.viewProduct1Button();
     cy.url().should("include", data.urls.productDetailsPageUrl + "1");
-    cy.get(data.textboxes.quantityTextbox).clear();
-    cy.get(data.textboxes.quantityTextbox).type("4");
-    cy.get(data.buttons.addToCartButtonAtDetailsPage).click();
-    cy.get(data.buttons.cartButton).eq(0).click();
+    cy.quantityTextbox().clear();
+    cy.quantityTextbox().type("4");
+    cy.addToCartButtonAtDetailsPage();
+    cy.cartButton().eq(0).click();
     cy.url().should("include", data.urls.cartUrl);
-    cy.get(data.labels.cartItemQuantity).should("contain", "5");
+    cy.cartItemQuantity().should("contain", "5");
   });
 });

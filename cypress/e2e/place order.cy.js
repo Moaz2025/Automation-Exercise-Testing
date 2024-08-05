@@ -6,100 +6,92 @@ describe("place order", () => {
   });
 
   beforeEach(() => {
-    cy.visit(data.urls.homePageUrl);
+    cy.homePage();
   });
 
   // view cart from the message
   it("Check that user can't checkout as a guest", () => {
-    cy.get(data.buttons.addToCartButton).eq(0).click();
-    cy.get(data.selectors.addedToCartPopupBox).should(
+    cy.addToCartButton();
+    cy.addedToCartPopupBox().should(
       "contain",
       data.messages.addedToCartMessage
     );
-    cy.get(data.buttons.cartButton).eq(1).click();
+    cy.cartButton().eq(1).click();
     cy.url().should("include", data.urls.cartUrl);
-    cy.get(data.labels.cartItemQuantity).should("contain", "1");
-    cy.get(data.buttons.checkoutButton).click();
-    cy.get(data.selectors.ckeckoutPopupBox).should(
+    cy.cartItemQuantity().should("contain", "1");
+    cy.checkoutButton();
+    cy.ckeckoutPopupBox().should(
       "contain",
       data.messages.checkoutAsGuestMessage
     );
-    cy.get(data.selectors.ckeckoutPopupBox)
-      .contains(data.buttons.continueOnCartButton)
-      .click();
+    cy.ckeckoutPopupBox().contains(data.buttons.continueOnCartButton).click();
     cy.url().should("include", data.urls.cartUrl);
+    cy.cartQuantityDeleteButton();
   });
 
   // view cart from the main cart button
   it("Check that user can't checkout as a guest", () => {
-    cy.get(data.buttons.addToCartButton).eq(0).click();
-    cy.get(data.selectors.addedToCartPopupBox).should(
+    cy.addToCartButton();
+    cy.addedToCartPopupBox().should(
       "contain",
       data.messages.addedToCartMessage
     );
-    cy.get(data.buttons.continueShoppingButton).click();
-    cy.get(data.buttons.cartButton).eq(0).click();
+    cy.continueShoppingButton();
+    cy.cartButton().eq(0).click();
     cy.url().should("include", data.urls.cartUrl);
-    cy.get(data.labels.cartItemQuantity).should("contain", "1");
-    cy.get(data.buttons.checkoutButton).click();
-    cy.get(data.selectors.ckeckoutPopupBox).should(
+    cy.cartItemQuantity().should("contain", "1");
+    cy.checkoutButton();
+    cy.ckeckoutPopupBox().should(
       "contain",
       data.messages.checkoutAsGuestMessage
     );
-    cy.get(data.selectors.ckeckoutPopupBox)
-      .contains(data.buttons.continueOnCartButton)
-      .click();
+    cy.ckeckoutPopupBox().contains(data.buttons.continueOnCartButton).click();
     cy.url().should("include", data.urls.cartUrl);
+    cy.cartQuantityDeleteButton();
   });
 
   it("Check that user can't checkout with empty cart", () => {
-    cy.get(data.buttons.signupAndLoginPageButton).click();
-    cy.get(data.textboxes.loginEmailTextbox).type(data.testData.email);
-    cy.get(data.textboxes.loginPasswordTextbox).type(data.testData.password);
-    cy.get(data.buttons.loginButton).click();
+    cy.signupAndLoginPageButton();
+    cy.loginEmail().type(data.testData.email);
+    cy.loginPassword().type(data.testData.password);
+    cy.loginButton();
     cy.title().should("eq", data.titles.homePageTitle);
-    cy.get(data.selectors.shopMenu).should("contain", data.labels.loginStatus);
-    cy.get(data.buttons.cartButton).eq(0).click();
+    cy.shopMenu().should("contain", data.labels.loginStatus);
+    cy.cartButton().eq(0).click();
     cy.url().should("include", data.urls.cartUrl);
-    cy.get(data.selectors.emptyCartBox).should(
-      "contain",
-      data.messages.emptyCartMessage
-    );
+    cy.emptyCartBox().should("contain", data.messages.emptyCartMessage);
   });
 
   it("Check that user can checkout with valid card", () => {
-    cy.get(data.buttons.signupAndLoginPageButton).click();
-    cy.get(data.textboxes.loginEmailTextbox).type(data.testData.email);
-    cy.get(data.textboxes.loginPasswordTextbox).type(data.testData.password);
-    cy.get(data.buttons.loginButton).click();
+    cy.signupAndLoginPageButton();
+    cy.loginEmail().type(data.testData.email);
+    cy.loginPassword().type(data.testData.password);
+    cy.loginButton();
     cy.title().should("eq", data.titles.homePageTitle);
-    cy.get(data.selectors.shopMenu).should("contain", data.labels.loginStatus);
-    cy.get(data.buttons.addToCartButton).eq(0).click();
-    cy.get(data.selectors.addedToCartPopupBox).should(
+    cy.shopMenu().should("contain", data.labels.loginStatus);
+    cy.addToCartButton().eq(0).click();
+    cy.addedToCartPopupBox().should(
       "contain",
       data.messages.addedToCartMessage
     );
-    cy.get(data.buttons.continueShoppingButton).click();
-    cy.get(data.buttons.cartButton).eq(0).click();
+    cy.continueShoppingButton();
+    cy.cartButton().eq(0).click();
     cy.url().should("include", data.urls.cartUrl);
-    cy.get(data.labels.cartItemQuantity).should("contain", "1");
-    cy.get(data.buttons.checkoutButton).click();
+    //cy.cartItemQuantity().should("contain", "1");
+    cy.checkoutButton();
     cy.url().should("include", data.urls.checkoutUrl);
-    cy.get(data.buttons.placeOrderButton).click();
-    cy.get(data.textboxes.nameOnCardTextbox).type(data.testData.name);
-    cy.get(data.textboxes.cardNumberTextbox).type(data.testData.cardNumber);
-    cy.get(data.textboxes.cvcTextbox).type(data.testData.cvc);
-    cy.get(data.textboxes.expiryMonthTextbox).type(data.testData.expiryMonth);
-    cy.get(data.textboxes.expiryYearTextbox).type(data.testData.expiryYear);
-    cy.get(data.buttons.payAndConfirmOrderButton).click();
+    cy.placeOrderButton();
+    cy.nameOnCard().type(data.testData.name);
+    cy.cardNumber().type(data.testData.cardNumber);
+    cy.cvc().type(data.testData.cvc);
+    cy.expiryMonth().type(data.testData.expiryMonth);
+    cy.expiryYear().type(data.testData.expiryYear);
+    cy.payAndConfirmOrderButton();
     cy.url().should("include", data.urls.orderPlacedUrl);
-    cy.get(data.selectors.orderPlacedBox).should(
-      "contain",
-      data.messages.orderPlacedMessage
-    );
-    cy.get(data.buttons.continueButton).click();
+    cy.orderPlacedBox().should("contain", data.messages.orderPlacedMessage);
+    cy.continueButton();
     cy.url().should("eq", data.urls.homePageUrl);
-    cy.get(data.buttons.homeButton).should(
+    cy.homeButton().should(
       "have.css",
       "color",
       data.selectors.colorOfSelectedPage

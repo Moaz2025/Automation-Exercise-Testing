@@ -123,7 +123,7 @@
     "homeButtonText": " Home",
     "emptyCartBox": "[id=\"empty_cart\"]",
     "orderPlacedBox": "[class=\"title text-center\"]",
-    "colorOfSelectedPage": "rgb(66, 139, 202)",
+    "colorOfSelectedPage": "rgb(255, 165, 0)",
     "leftSidebar": ".left-sidebar > h2",
     "brandsProducts": ".brands_products > h2",
     "slider": "#slider-carousel",

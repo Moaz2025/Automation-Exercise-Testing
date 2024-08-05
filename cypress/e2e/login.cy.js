@@ -6,55 +6,51 @@ describe("login", () => {
   });
 
   beforeEach(() => {
-    cy.visit(data.urls.homePageUrl);
-    cy.get(data.buttons.signupAndLoginPageButton).click();
+    cy.homePage();
+    cy.signupAndLoginPageButton();
   });
 
   it("Check that user can login with right email and password", () => {
-    cy.get(data.textboxes.loginEmailTextbox).type(data.testData.email);
-    cy.get(data.textboxes.loginPasswordTextbox).type(data.testData.password);
-    cy.get(data.buttons.loginButton).click();
+    cy.loginEmail().type(data.testData.email);
+    cy.loginPassword().type(data.testData.password);
+    cy.loginButton();
     cy.title().should("eq", data.titles.homePageTitle);
-    cy.get(data.selectors.shopMenu).should("contain", data.labels.loginStatus);
-    cy.get(data.buttons.logoutButton).should("exist");
-    cy.get(data.buttons.deleteAccountButton).should("exist");
+    cy.shopMenu().should("contain", data.labels.loginStatus);
+    cy.logoutButton().should("exist");
+    cy.deleteAccountButton().should("exist");
   });
 
   it("Check that user can't login with email not exist", () => {
-    cy.get(data.textboxes.loginEmailTextbox).type(
-      data.testData.nonExistingEmail
-    );
-    cy.get(data.textboxes.loginPasswordTextbox).type(data.testData.password);
-    cy.get(data.buttons.loginButton).click();
-    cy.get(data.labels.loginErrorLabel).should(
+    cy.loginEmail().type(data.testData.nonExistingEmail);
+    cy.loginPassword().type(data.testData.password);
+    cy.loginButton();
+    cy.loginErrorLabel().should(
       "contain",
       data.messages.incorrectEmailOrPasswordMessage
     );
   });
 
   it("Check that user can't login with wrong password", () => {
-    cy.get(data.textboxes.loginEmailTextbox).type(data.testData.email);
-    cy.get(data.textboxes.loginPasswordTextbox).type(
-      data.testData.wrongPassword
-    );
-    cy.get(data.buttons.loginButton).click();
-    cy.get(data.labels.loginErrorLabel).should(
+    cy.loginEmail().type(data.testData.email);
+    cy.loginPassword().type(data.testData.wrongPassword);
+    cy.loginButton();
+    cy.loginErrorLabel().should(
       "contain",
       data.messages.incorrectEmailOrPasswordMessage
     );
   });
 
   it("Check that user can't login with empty email field", () => {
-    cy.get(data.textboxes.loginPasswordTextbox).type(data.testData.password);
-    cy.get(data.buttons.loginButton).click();
+    cy.loginPassword().type(data.testData.password);
+    cy.loginButton();
   });
 
   it("Check that user can't login with empty password field", () => {
-    cy.get(data.textboxes.loginEmailTextbox).type(data.testData.email);
-    cy.get(data.buttons.loginButton).click();
+    cy.loginEmail().type(data.testData.email);
+    cy.loginButton();
   });
 
   it("Check that user can't login with empty email and password fields", () => {
-    cy.get(data.buttons.loginButton).click();
+    cy.loginButton();
   });
 });

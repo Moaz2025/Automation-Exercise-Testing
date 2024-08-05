@@ -6,62 +6,59 @@ describe("signup", () => {
   });
 
   beforeEach(() => {
-    cy.visit(data.urls.homePageUrl);
-    cy.get(data.buttons.signupAndLoginPageButton).click();
+    cy.homePage();
+    cy.signupAndLoginPageButton();
   });
 
   it("Check that user can't signup with empty name and email", () => {
-    cy.get(data.buttons.signupButton).click();
+    cy.signupButton();
   });
 
   it("Check that user can't signup with empty name", () => {
-    cy.get(data.textboxes.signupEmailTextbox).type(data.testData.email);
-    cy.get(data.buttons.signupButton).click();
+    cy.signupEmail().type(data.testData.email);
+    cy.signupButton();
   });
 
   it("Check that user can't signup with empty email", () => {
-    cy.get(data.textboxes.signupNameTextbox).type(data.testData.name);
-    cy.get(data.buttons.signupButton).click();
+    cy.signupName().type(data.testData.name);
+    cy.signupButton();
   });
 
   it("Check that user can't signup with invalid email", () => {
-    cy.get(data.textboxes.signupNameTextbox).type(data.testData.name);
-    cy.get(data.textboxes.signupEmailTextbox).type(data.testData.invalidEmail);
-    cy.get(data.buttons.signupButton).click();
+    cy.signupName().type(data.testData.name);
+    cy.signupEmail().type(data.testData.invalidEmail);
+    cy.signupButton();
   });
 
   it("Check that user can signup with valid name, email, and valid details", () => {
     cy.title().should("eq", data.titles.signupAndLoginPageTitle);
-    cy.get(data.textboxes.signupNameTextbox).type(data.testData.name);
+    cy.signupName().type(data.testData.name);
     let email = generateEmail();
-    cy.get(data.textboxes.signupEmailTextbox).type(email);
+    cy.signupEmail().type(email);
     cy.readFile("emails.txt", { log: false }).then((fileContent) => {
       cy.writeFile("emails.txt", fileContent + email + "\n");
     });
-    cy.get(data.buttons.signupButton).click();
+    cy.signupButton();
     cy.title().should("eq", data.titles.signupPageTitle);
-    cy.get(data.textboxes.passwordTextbox).type(data.testData.password);
-    cy.get(data.textboxes.firstNameTextbox).type(data.testData.name);
-    cy.get(data.textboxes.lastNameTextbox).type(data.testData.lastName);
-    cy.get(data.textboxes.addressTextbox).type(data.testData.address);
-    cy.get(data.selectors.countryDropdownMenu).select(data.testData.country);
-    cy.get(data.textboxes.stateTextbox).type(data.testData.state);
-    cy.get(data.textboxes.cityTextbox).type(data.testData.city);
-    cy.get(data.textboxes.zipcodeTextbox).type(data.testData.zipcode);
-    cy.get(data.textboxes.mobileNumberTextbox).type(data.testData.mobileNumber);
-    cy.get(data.buttons.createAccountButton).click();
+    cy.password().type(data.testData.password);
+    cy.firstName().type(data.testData.name);
+    cy.lastName().type(data.testData.lastName);
+    cy.address().type(data.testData.address);
+    cy.country().select(data.testData.country);
+    cy.states().type(data.testData.state);
+    cy.city().type(data.testData.city);
+    cy.zipcode().type(data.testData.zipcode);
+    cy.mobileNumber().type(data.testData.mobileNumber);
+    cy.createAccountButton();
     cy.title().should("eq", data.titles.accountCreatedPageTitle);
     cy.url().should("include", data.urls.accountCreatedPageUrl);
   });
 
   it("Check that user can't signup with email already registered", () => {
-    cy.get(data.textboxes.signupNameTextbox).type(data.testData.name);
-    cy.get(data.textboxes.signupEmailTextbox).type(data.testData.email);
-    cy.get(data.buttons.signupButton).click();
-    cy.get(data.labels.signupErrorLabel).should(
-      "contain",
-      data.messages.emailExistMessage
-    );
+    cy.signupName().type(data.testData.name);
+    cy.signupEmail().type(data.testData.email);
+    cy.signupButton();
+    cy.signupErrorLabel().should("contain", data.messages.emailExistMessage);
   });
 });
 
