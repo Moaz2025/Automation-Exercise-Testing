@@ -1,3 +1,6 @@
+import Signup from "../support/POM/signup";
+const signup = new Signup();
+
 describe("signup", () => {
   before(() => {
     cy.fixture("example").then(function (data) {
@@ -6,66 +9,43 @@ describe("signup", () => {
   });
 
   beforeEach(() => {
-    cy.homePage();
-    cy.signupAndLoginPageButton();
+    signup.signupAndLoginPage();
   });
 
   it("Check that user can't signup with empty name and email", () => {
-    cy.signupButton();
+    signup.signupButton();
   });
 
   it("Check that user can't signup with empty name", () => {
-    cy.signupEmail().type(data.testData.email);
-    cy.signupButton();
+    signup.enterEmail();
+    signup.signupButton();
   });
 
   it("Check that user can't signup with empty email", () => {
-    cy.signupName().type(data.testData.name);
-    cy.signupButton();
+    signup.enterName();
+    signup.signupButton();
   });
 
   it("Check that user can't signup with invalid email", () => {
-    cy.signupName().type(data.testData.name);
+    signup.enterName();
     cy.signupEmail().type(data.testData.invalidEmail);
-    cy.signupButton();
+    signup.signupButton();
   });
 
   it("Check that user can signup with valid name, email, and valid details", () => {
     cy.title().should("eq", data.titles.signupAndLoginPageTitle);
-    cy.signupName().type(data.testData.name);
-    let email = generateEmail();
-    cy.signupEmail().type(email);
-    cy.readFile("emails.txt", { log: false }).then((fileContent) => {
-      cy.writeFile("emails.txt", fileContent + email + "\n");
-    });
-    cy.signupButton();
+    signup.enterName();
+    signup.enterGeneratedEmail();
+    signup.signupButton();
     cy.title().should("eq", data.titles.signupPageTitle);
-    cy.password().type(data.testData.password);
-    cy.firstName().type(data.testData.name);
-    cy.lastName().type(data.testData.lastName);
-    cy.address().type(data.testData.address);
-    cy.country().select(data.testData.country);
-    cy.states().type(data.testData.state);
-    cy.city().type(data.testData.city);
-    cy.zipcode().type(data.testData.zipcode);
-    cy.mobileNumber().type(data.testData.mobileNumber);
-    cy.createAccountButton();
-    cy.title().should("eq", data.titles.accountCreatedPageTitle);
-    cy.url().should("include", data.urls.accountCreatedPageUrl);
+    signup.validData();
+    signup.createAccount();
   });
 
   it("Check that user can't signup with email already registered", () => {
-    cy.signupName().type(data.testData.name);
-    cy.signupEmail().type(data.testData.email);
-    cy.signupButton();
+    signup.enterName();
+    signup.enterEmail();
+    signup.signupButton();
     cy.signupErrorLabel().should("contain", data.messages.emailExistMessage);
   });
 });
-
-function generateEmail() {
-  let emailBase = "@gmail.com";
-  let emailBody = "moaz20ahmed";
-  let random = Math.floor(Math.random() * 1000000 + 1);
-  let email = `${emailBody}+${random}${emailBase}`;
-  return email;
-}

@@ -1,3 +1,9 @@
+import Signup from "../support/POM/signup";
+import Login from "../support/POM/login";
+
+const signup = new Signup();
+const login = new Login();
+
 describe("login", () => {
   before(() => {
     cy.fixture("example").then(function (data) {
@@ -6,51 +12,41 @@ describe("login", () => {
   });
 
   beforeEach(() => {
-    cy.homePage();
-    cy.signupAndLoginPageButton();
+    signup.signupAndLoginPage();
   });
 
   it("Check that user can login with right email and password", () => {
-    cy.loginEmail().type(data.testData.email);
-    cy.loginPassword().type(data.testData.password);
-    cy.loginButton();
-    cy.title().should("eq", data.titles.homePageTitle);
-    cy.shopMenu().should("contain", data.labels.loginStatus);
-    cy.logoutButton().should("exist");
-    cy.deleteAccountButton().should("exist");
+    login.enterEmail();
+    login.enterPassword();
+    login.loginbutton();
+    login.loggedIn();
   });
 
   it("Check that user can't login with email not exist", () => {
     cy.loginEmail().type(data.testData.nonExistingEmail);
-    cy.loginPassword().type(data.testData.password);
-    cy.loginButton();
-    cy.loginErrorLabel().should(
-      "contain",
-      data.messages.incorrectEmailOrPasswordMessage
-    );
+    login.enterPassword();
+    login.loginbutton();
+    login.loginErrorMessage();
   });
 
   it("Check that user can't login with wrong password", () => {
-    cy.loginEmail().type(data.testData.email);
+    login.enterEmail();
     cy.loginPassword().type(data.testData.wrongPassword);
-    cy.loginButton();
-    cy.loginErrorLabel().should(
-      "contain",
-      data.messages.incorrectEmailOrPasswordMessage
-    );
+    login.loginbutton();
+    login.loginErrorMessage();
   });
 
   it("Check that user can't login with empty email field", () => {
-    cy.loginPassword().type(data.testData.password);
-    cy.loginButton();
+    login.enterPassword();
+    login.loginbutton();
   });
 
   it("Check that user can't login with empty password field", () => {
-    cy.loginEmail().type(data.testData.email);
-    cy.loginButton();
+    login.enterEmail();
+    login.loginbutton();
   });
 
   it("Check that user can't login with empty email and password fields", () => {
-    cy.loginButton();
+    login.loginbutton();
   });
 });

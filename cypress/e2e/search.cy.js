@@ -1,3 +1,6 @@
+import Search from "../support/POM/search";
+const search = new Search();
+
 describe("search", () => {
   before(() => {
     cy.fixture("example").then(function (data) {
@@ -6,14 +9,12 @@ describe("search", () => {
   });
 
   beforeEach(() => {
-    cy.homePage();
-    cy.productsButton();
-    cy.title().should("eq", data.titles.productsPageTitle);
+    search.productsPage();
   });
 
   it("Check that user can search for a keyword that is found in the products", () => {
     cy.search().type(data.testData.foundKeyword);
-    cy.searchButton();
+    search.searchButton();
     cy.url().should(
       "include",
       data.urls.searchProductsUrl + data.testData.foundKeyword
@@ -22,7 +23,7 @@ describe("search", () => {
 
   it("Check that user can't search for a keyword that is not found in the products", () => {
     cy.search().type(data.testData.notFoundKeyword);
-    cy.searchButton();
+    search.searchButton();
     cy.url().should(
       "include",
       data.urls.searchProductsUrl + data.testData.notFoundKeyword
@@ -30,7 +31,7 @@ describe("search", () => {
   });
 
   it("Check that user can't search for an empty keyword", () => {
-    cy.searchButton();
+    search.searchButton();
     cy.url().should("include", data.urls.searchProductsUrl);
   });
 });
